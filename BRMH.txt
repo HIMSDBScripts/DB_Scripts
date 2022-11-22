@@ -1,0 +1,84 @@
+UPDATE hmhcholders0 A
+   SET (validfrom,
+        validto,
+        discountamt,
+        hcbalamt,
+        regdisc,
+        opcondisc,
+        opbilldisc,
+        oposbilldisc,
+        oppharmacydisc,
+        ipservdisc,
+        ipconsprofdisc,
+        ipinvesdisc,
+        ipprocdisc,
+        ipwarddisc,
+        ippharmdisc,
+        iposbilldisc,
+        totalipdisc) =
+          (SELECT VALIDFROM,
+                  VALIDTO,
+                  0,
+                  AMOUNT,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+             FROM BRMH_JUNE b
+            WHERE A.CARDTYPECD = B.CARDTYPECD)
+ WHERE EXISTS
+          (SELECT 1
+             FROM BRMH_JUNE c
+            WHERE A.CARDTYPECD = c.CARDTYPECD)
+/
+
+select * from hmhcholders0 where CARDTYPECD='HCR6'
+
+/
+
+UPDATE hmhcholders0 A
+   SET validfrom = VALIDTO,
+       validto = VALIDTO + 365,
+       discountamt = 0,
+       hcbalamt = hcamount,
+       regdisc = 0,
+       opcondisc = 0,
+       opbilldisc = 0,
+       oposbilldisc = 0,
+       oppharmacydisc = 0,
+       ipservdisc = 0,
+       ipconsprofdisc = 0,
+       ipinvesdisc = 0,
+       ipprocdisc = 0,
+       ipwarddisc = 0,
+       ippharmdisc = 0,
+       iposbilldisc = 0,
+       totalipdisc = 0
+ WHERE EXISTS
+          (SELECT 1
+             FROM BRMH_AUG B
+            WHERE     A.HCHOLDERNO = B.HCHOLDERNO
+                  AND A.CARDTYPECD = B.CARDTYPECD
+                  AND A.CARDNO = B.CARDNO)
+                  /
+                  SELECT * FROM hmhcholders0 WHERE 
+                  
+       /           
+                  
+                  CREATE TABLE BRMH_AUG
+(
+   HCHOLDERNO   VARCHAR2 (15),
+   CARDTYPECD   VARCHAR2 (15),
+   CARDNO       VARCHAR2 (15),
+   VALIDFROM    DATE,
+   VALIDTO      DATE
+)
